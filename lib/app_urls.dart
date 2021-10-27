@@ -13,7 +13,7 @@ class AppUrls {
   static const FREEZER = '/equipto/freezer';
 
   static const PRODUCT_LIST = '/produto/conspro';
-  static const PRODUCT = 'produto/concpro';
+  static const PRODUCT = '/produto/concpro';
 
   static const REQUEST_PRODUCT = '/pedido/consulta';
   static const REQUEST_PRODUCT_LIST = '/pedido/list';

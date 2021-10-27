@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_colors.dart';
 import 'package:gosti_mobile/app/core/app_text_styles.dart';
+import 'package:gosti_mobile/app/modules/cart/cart_controller.dart';
 import 'package:gosti_mobile/app/modules/product/models/product.dart';
+import 'package:gosti_mobile/app/modules/product/product_controller.dart';
+import 'package:gosti_mobile/app/modules/product/widgets/product_details.dart';
 import 'package:intl/intl.dart';
 
 class ProductList extends StatelessWidget {
@@ -16,8 +20,13 @@ class ProductList extends StatelessWidget {
 }
 
 Widget producItem(Product product) {
+  ProductController controller = Get.find<ProductController>();
+  CartController cartController = Get.find<CartController>();
   return GestureDetector(
-    onTap: () {},
+    onTap: () async {
+      await controller.loadProduct(idProduct: product.id!);
+      Get.to(() => ProductDetails(product: product));
+    },
     child: Container(
       padding: const EdgeInsets.only(top: 5, left: 10),
       height: 75,
@@ -62,7 +71,7 @@ Widget producItem(Product product) {
                       width: 10,
                     ),
                     Text(
-                      '${product.saldo!.saldo!}',
+                      '${cartController.checkQtdAvailable(product)}',
                       style: TextStyle(
                         color: AppColors.black,
                         fontWeight: FontWeight.bold,
@@ -71,33 +80,19 @@ Widget producItem(Product product) {
                     ),
                     IconButton(
                       onPressed: () {
-                        /* if (bloc.checkQtdAvailable(_food) < 1) {
-                                    ScaffoldMessenger.of(context)
-                                      ..hideCurrentSnackBar()
-                                      ..showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                              "${_food.nome} não está disponivel"),
-                                        ),
-                                      );
-                                  } else {
-                                    bloc.addItem(
-                                      id: _food.id!,
-                                      name: _food.nome!,
-                                      price: _food.preco!,
-                                      qtdAvailable: _food.saldos!.saldo,
-                                    );
-                                    ScaffoldMessenger.of(context)
-                                      ..hideCurrentSnackBar()
-                                      ..showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: Colors.green,
-                                          content: Text(
-                                              "${_food.nome} Adicionado ao carrinho !"),
-                                        ),
-                                      );
-                                  }*/
+                        if (cartController.checkQtdAvailable(product) < 1) {
+                          Get.snackbar(
+                              '${product.nome}', ' não está disponivel');
+                        } else {
+                          cartController.addItem(
+                            id: product.id!,
+                            name: product.nome!,
+                            price: product.preco!,
+                            qtdAvailable: product.saldo!.saldo!,
+                          );
+                          Get.snackbar(
+                              '${product.nome}', ' Adicionado ao carrinho !');
+                        }
                       },
                       icon: const Image(
                         image: AssetImage('assets/icons/carrinho1.png'),

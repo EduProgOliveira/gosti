@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:gosti_mobile/app/modules/cart/cart_controller.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/product/models/product.dart';
 import 'package:gosti_mobile/app/modules/service/product_service.dart';
@@ -7,7 +8,11 @@ enum StatusProduct { loading, fail, start, load }
 
 class ProductController extends GetxController {
   FreezerController freezerController = Get.find<FreezerController>();
+  CartController cartController = Get.put(CartController());
   final ProductService _service = ProductService();
+
+  var status = StatusProduct.start.obs;
+  late Product product;
   List<Product> listProduct = [];
   List<Product> listAcompanhamentos = [];
   List<Product> listCarnes = [];
@@ -15,7 +20,13 @@ class ProductController extends GetxController {
   List<Product> listFit = [];
   List<Product> listMassas = [];
   List<Product> listTradicional = [];
-  var status = StatusProduct.start.obs;
+
+  loadProduct({required int idProduct}) async {
+    var response = await _service.getProduct(idProduct: idProduct);
+    if (response != null) {
+      product = Product.fromJson(response);
+    }
+  }
 
   loadListProduct() async {
     status.value = StatusProduct.loading;
