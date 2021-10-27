@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gosti_mobile/app_pages.dart';
 import 'package:gosti_mobile/app_routes.dart';
 import 'package:gosti_mobile/app_status.dart';
+import 'package:gosti_mobile/theme.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      future: checkAuth(),
       builder: (context, snap) {
         if (AppStatus.APP_STATUS == AppState.loading) {
           return const Splash();
@@ -20,6 +22,7 @@ class AppWidget extends StatelessWidget {
           defaultTransition: Transition.rightToLeft,
           debugShowCheckedModeBanner: false,
           initialRoute: AppPages.HOME,
+          theme: theme,
           localizationsDelegates: const [
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -30,6 +33,12 @@ class AppWidget extends StatelessWidget {
       },
     );
   }
+}
+
+checkAuth() async {
+  AppStatus.APP_STATUS = AppState.loading;
+  await Future.delayed(const Duration(seconds: 2));
+  AppStatus.APP_STATUS = AppState.authenticate;
 }
 
 class Splash extends StatelessWidget {

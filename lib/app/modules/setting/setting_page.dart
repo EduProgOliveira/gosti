@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FreezerPage extends StatelessWidget {
-  const FreezerPage({Key? key}) : super(key: key);
+class SettingPage extends StatelessWidget {
+  const SettingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Freezer'),
+        child: Text('Pedidos'),
       ),
     );
   }
