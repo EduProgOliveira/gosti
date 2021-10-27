@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:gosti_mobile/app_pages.dart';
+import 'package:gosti_mobile/app_routes.dart';
 import 'package:gosti_mobile/app_status.dart';
 
 class AppWidget extends StatelessWidget {
@@ -12,9 +15,17 @@ class AppWidget extends StatelessWidget {
         if (AppStatus.APP_STATUS == AppState.loading) {
           return const Splash();
         }
-        return const GetMaterialApp(
-          initialRoute: '/',
-          routes: {},
+        return GetMaterialApp(
+          title: 'Gosti Mobile',
+          defaultTransition: Transition.rightToLeft,
+          debugShowCheckedModeBanner: false,
+          initialRoute: AppPages.HOME,
+          localizationsDelegates: const [
+            GlobalCupertinoLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          getPages: AppRoutes.routes,
         );
       },
     );

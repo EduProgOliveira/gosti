@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
   cupertino_icons: ^1.0.2
   cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0
@@ -26,12 +29,12 @@ dependencies:
   font_awesome_flutter: ^9.0.0
   formz: ^0.4.0
 
-  geolocator: ^7.6.2
   get: ^4.3.8
   google_fonts: ^2.1.0
 
   http: ^0.13.4
-
+  intl: ^0.17.0
+  
   mask_text_input_formatter: ^2.0.0-nullsafety.2
   mercadopago_sdk: ^1.3.0
   mercadopago_transparent: ^1.0.1
@@ -44,6 +47,7 @@ dependencies:
   url_launcher: ^6.0.9
 
   webview_flutter: ^2.0.10
+  
 
   
 dev_dependencies:
@@ -57,3 +61,6 @@ flutter:
     - assets/logos/
     - assets/images/
     - assets/icons/
+
+flutter_intl:
+    enabled: true
