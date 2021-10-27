@@ -11,7 +11,7 @@ class FreezerListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -33,7 +33,7 @@ class FreezerListItem extends StatelessWidget {
                 style: AppTextStyles.body,
               ),
               Text(
-                '${freezer.distancia!} Km',
+                '${freezer.distancia!.toStringAsFixed(2)} Km',
                 style: AppTextStyles.bodyBold.copyWith(fontSize: 12),
               ),
             ],
@@ -43,15 +43,15 @@ class FreezerListItem extends StatelessWidget {
             children: [
               Text(
                 '${freezer.endereco!} -',
-                style: AppTextStyles.body,
+                style: AppTextStyles.body.copyWith(fontSize: 12),
               ),
               Text(
                 '${freezer.bairro!} - ',
-                style: AppTextStyles.body,
+                style: AppTextStyles.body.copyWith(fontSize: 12),
               ),
               Text(
                 freezer.cep!,
-                style: AppTextStyles.body,
+                style: AppTextStyles.body.copyWith(fontSize: 12),
               ),
             ],
           ),
