@@ -7,7 +7,7 @@ class SearchProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
+      height: 40,
       child: TextFormField(
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search_rounded),

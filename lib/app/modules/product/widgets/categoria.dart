@@ -11,7 +11,7 @@ class Categoria extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: index,
-      height: 20,
+      padding: const EdgeInsets.symmetric(vertical: 2),
       color: AppColors.lightGrey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
