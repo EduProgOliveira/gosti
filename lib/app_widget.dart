@@ -47,7 +47,7 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: CircularProgressIndicator(),
+      child: Image.asset('assets/images/launch_image.png'),
     );
   }
 }

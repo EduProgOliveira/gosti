@@ -14,7 +14,7 @@ class AppRoutes {
         binding: HomeBinding()),
     GetPage(
       name: AppPages.DASHBOARD,
-      page: () => const DashBoardPage(),
+      page: () => DashBoardPage(),
       binding: DashBoardBinding(),
     ),
   ];

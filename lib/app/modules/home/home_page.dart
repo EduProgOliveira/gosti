@@ -10,64 +10,69 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImages.homeBackground),
-            fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(false);
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.homeBackground),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () => Get.toNamed(AppPages.DASHBOARD),
-                child: HomeOption(
-                  text: 'Freezer',
-                  imageAsset: AppImages.freezerIcon,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppPages.DASHBOARD),
+                  child: HomeOption(
+                    text: 'Freezer',
+                    imageAsset: AppImages.freezerIcon,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyWebView(
-                        title: 'Delivery Gosti',
-                        selectedUrl: 'https://www.gosti.com.br/produtos/',
+                const SizedBox(height: 50),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyWebView(
+                          title: 'Delivery Gosti',
+                          selectedUrl: 'https://www.gosti.com.br/produtos/',
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: HomeOption(
-                  text: 'Delivery Gosti',
-                  imageAsset: AppImages.deliveryIcon,
+                    );
+                  },
+                  child: HomeOption(
+                    text: 'Delivery Gosti',
+                    imageAsset: AppImages.deliveryIcon,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 50),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyWebView(
-                        title: 'Delivery Vivenda',
-                        selectedUrl:
-                            'https://www.emporiovivendadocamarao.com.br/',
+                const SizedBox(height: 50),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyWebView(
+                          title: 'Delivery Vivenda',
+                          selectedUrl:
+                              'https://www.emporiovivendadocamarao.com.br/',
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: HomeOption(
-                  text: 'Delivery Vivenda',
-                  imageAsset: AppImages.retireICon,
+                    );
+                  },
+                  child: HomeOption(
+                    text: 'Delivery Vivenda',
+                    imageAsset: AppImages.retireICon,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
