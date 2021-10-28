@@ -4,6 +4,7 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_text_styles.dart';
 import 'package:gosti_mobile/app/core/common_widgets/button_default_payment.dart';
+import 'package:gosti_mobile/app/modules/cart/cart_controller.dart';
 import 'package:gosti_mobile/app/modules/checkout/widgets/app_bar_checkout.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/verification_code/view/verification_code_page.dart';
@@ -11,12 +12,13 @@ import 'package:intl/intl.dart';
 
 enum MethodPayment { credit, debit, pix }
 enum TypePayment { card, pix }
-List<String> ManyPayment = ['1x', '2x', '4x'];
+List<String> ManyPayment = ['1x', '2x'];
 List<String> TypeDoc = ['cpf', 'cnpj'];
 
 class CheckoutPage extends StatelessWidget {
   CheckoutPage({Key? key}) : super(key: key);
   FreezerController freezerController = Get.find<FreezerController>();
+  CartController cartController = Get.find<CartController>();
 
   var date_expiration = MaskedTextController(mask: '00/0000');
 
@@ -34,7 +36,7 @@ class CheckoutPage extends StatelessWidget {
           Expanded(
               child: SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -47,8 +49,8 @@ class CheckoutPage extends StatelessWidget {
                     NumberFormat.currency(
                       name: 'TOTAL À PAGAR: R\$ ',
                       decimalDigits: 2,
-                    ).format(10),
-                    style: AppTextStyles.bodyBoldBlack,
+                    ).format(cartController.total),
+                    style: AppTextStyles.bodyBoldBlack.copyWith(fontSize: 18),
                   ),
                   const Divider(
                     height: 5,
@@ -343,9 +345,11 @@ class CheckoutPage extends StatelessWidget {
                       Text('Li e concordo com o(s) termos e condições *')
                     ],
                   ),
-                  ButtonDefaultPayment(
-                    text: 'PAGAR PEDIDO',
-                    onPressed: () async {},
+                  Center(
+                    child: ButtonDefaultPayment(
+                      text: 'PAGAR PEDIDO',
+                      onPressed: () async {},
+                    ),
                   ),
                 ],
               ),
