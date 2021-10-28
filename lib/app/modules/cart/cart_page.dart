@@ -57,7 +57,8 @@ class CartPage extends StatelessWidget {
                     text: 'CONTINUAR PARA O PAGAMENTO',
                     enabled: controller.listCart.isEmpty ? false : true,
                     onPressed: () async {
-                      bool valid = false;
+                      Get.toNamed(AppPages.CHECKOUT);
+                      /* bool valid = false;
                       await Get.defaultDialog(
                         title: 'Validando Carrinho',
                         content: FutureBuilder<bool>(
@@ -73,7 +74,22 @@ class CartPage extends StatelessWidget {
                           },
                         ),
                       );
-                      valid ? Get.toNamed(AppPages.CHECKOUT) : '';
+                      await Future.delayed(const Duration(seconds: 2));
+                      valid
+                          ? Get.toNamed(AppPages.CHECKOUT)
+                          : await Get.defaultDialog(
+                              title: 'Itens esgotado(s)',
+                              content: Expanded(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      CartList(
+                                          listCart: controller.listCartEmpty),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );*/
                     },
                   ),
                 ],

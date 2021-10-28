@@ -16,7 +16,7 @@ class CartService {
         }),
       );
       if (response.statusCode == 200) {
-        return response.data;
+        return ValidCart.fromJson(response.data);
       }
     } on DioError catch (e) {
       print(e.message);

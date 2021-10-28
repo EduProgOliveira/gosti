@@ -35,7 +35,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppPages.CHECKOUT,
-      page: () => const CheckoutPage(),
+      page: () => CheckoutPage(),
     ),
   ];
 }

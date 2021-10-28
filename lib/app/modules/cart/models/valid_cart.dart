@@ -2,7 +2,7 @@ class ValidCart {
   bool? status;
   int? idEquipto;
   int? idCli;
-  int? valorTotal;
+  num? valorTotal;
   int? valorCupom;
   String? cupom;
   int? idPedido;
@@ -39,13 +39,13 @@ class ValidCart {
 
   Map<String, dynamic> toJson() {
     return {
-      'status': status,
+      'status': status ?? false,
       'idEquipto': idEquipto,
       'idCli': idCli,
       'valorTotal': valorTotal,
-      'valorCupom': valorCupom,
-      'cupom': cupom,
-      'idPedido': idPedido,
+      'valorCupom': valorCupom ?? 0,
+      'cupom': cupom ?? '',
+      'idPedido': idPedido ?? 0,
       'itens': itens!.map((e) => e.toJson()).toList(),
     };
   }
@@ -54,8 +54,8 @@ class ValidCart {
 class Itens {
   int? item;
   int? idProd;
-  int? qtd;
-  int? valorItem;
+  num? qtd;
+  num? valorItem;
   String? status;
 
   Itens({this.item, this.idProd, this.qtd, this.valorItem, this.status});
@@ -76,7 +76,7 @@ class Itens {
       'idProd': idProd,
       'qtd': qtd,
       'valorItem': valorItem,
-      'status': status,
+      'status': status ?? '',
     };
   }
 }

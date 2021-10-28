@@ -1,20 +1,50 @@
 import 'package:get/get.dart';
 import 'package:gosti_mobile/app/modules/cart/models/cart.dart';
 import 'package:gosti_mobile/app/modules/cart/models/valid_cart.dart';
+import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/product/models/product.dart';
 import 'package:gosti_mobile/app/modules/service/cart_service.dart';
+import 'package:gosti_mobile/app_preferences.dart';
 
 class CartController extends GetxController {
   CartService _service = CartService();
+  FreezerController freezerController = Get.find<FreezerController>();
   List<CartItem> listCart = <CartItem>[].obs;
+  List<CartItem> listCartEmpty = <CartItem>[].obs;
   double total = 0.00;
   num totalItens = 0;
 
   Future<bool> validCart() async {
-    print(listCart);
+    List<Itens> itensTemp = [];
     await Future.delayed(const Duration(seconds: 3));
-    //_service.validCart(ValidCart());
-    return true;
+
+    for (var i = 0; i < listCart.length; i++) {
+      itensTemp.add(Itens(
+        item: i + 1,
+        idProd: listCart[i].id,
+        qtd: listCart[i].qtd,
+        valorItem: listCart[i].price,
+      ));
+    }
+
+    ValidCart response = await _service.validCart(ValidCart(
+      idCli: await AppPreferences.ID(),
+      idEquipto: freezerController.freezer().id,
+      valorTotal: total,
+      itens: itensTemp,
+    ));
+
+    if (response.status == true) {
+      return true;
+    }
+
+    for (var i = 0; i < listCart.length; i++) {
+      if (listCart[i].id == response.itens![i].idProd) {
+        listCartEmpty.add(listCart[i]);
+      }
+    }
+
+    return false;
   }
 
   void addItem({
