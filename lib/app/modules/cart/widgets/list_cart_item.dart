@@ -69,13 +69,47 @@ class CartItemList extends StatelessWidget {
                 IconButton(
                   onPressed: () async {
                     if (cart.qtd == 1) {
-                      var val = await Get.defaultDialog(
+                      await Get.defaultDialog(
                         title: 'Deseja remover este item do carrinho ?',
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                await controller.remove(id: cart.id);
+                                Get.back();
+                              },
+                              child: Text(
+                                'Sim',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: TextButton.styleFrom(
+                                elevation: 2,
+                                backgroundColor: AppColors.primaryColor,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text(
+                                'Não',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: TextButton.styleFrom(
+                                elevation: 2,
+                                backgroundColor: AppColors.buttonCupom,
+                              ),
+                            ),
+                          ],
+                        ),
                       );
-
-                      val ? controller.remove(id: cart.id) : '';
+                    } else {
+                      controller.remove(id: cart.id);
                     }
-                    controller.remove(id: cart.id);
                   },
                   icon: Icon(
                     Icons.do_not_disturb_on_sharp,
@@ -87,7 +121,7 @@ class CartItemList extends StatelessWidget {
                   style: AppTextStyles.priceFoodItemBold,
                 ),
                 SizedBox(
-                  width: 25,
+                  width: 20,
                 ),
                 Text(
                   Utils.getValueInCurrency(cart.price * cart.qtd),

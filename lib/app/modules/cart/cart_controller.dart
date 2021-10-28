@@ -1,11 +1,21 @@
 import 'package:get/get.dart';
 import 'package:gosti_mobile/app/modules/cart/models/cart.dart';
+import 'package:gosti_mobile/app/modules/cart/models/valid_cart.dart';
 import 'package:gosti_mobile/app/modules/product/models/product.dart';
+import 'package:gosti_mobile/app/modules/service/cart_service.dart';
 
 class CartController extends GetxController {
+  CartService _service = CartService();
   List<CartItem> listCart = <CartItem>[].obs;
   double total = 0.00;
   num totalItens = 0;
+
+  Future<bool> validCart() async {
+    print(listCart);
+    await Future.delayed(const Duration(seconds: 3));
+    //_service.validCart(ValidCart());
+    return true;
+  }
 
   void addItem({
     required int id,

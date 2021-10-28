@@ -9,6 +9,7 @@ import 'package:gosti_mobile/app/modules/cart/widgets/list_cart_item.dart';
 import 'package:gosti_mobile/app/modules/cart/widgets/search_cart.dart';
 import 'package:gosti_mobile/app/modules/cart/widgets/voucher.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
+import 'package:gosti_mobile/app_pages.dart';
 
 class CartPage extends StatelessWidget {
   CartPage({Key? key}) : super(key: key);
@@ -38,12 +39,12 @@ class CartPage extends StatelessWidget {
                 children: [
                   Amount(
                     text: 'Sub Total',
-                    total: Utils.getValueInCurrency(20),
+                    total: Utils.getValueInCurrency(controller.total),
                   ),
                   const Voucher(),
                   Amount(
                     text: 'Total à Pagar',
-                    total: Utils.getValueInCurrency(20),
+                    total: Utils.getValueInCurrency(controller.total),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -54,9 +55,25 @@ class CartPage extends StatelessWidget {
                   ),
                   ButtonDefaultPayment(
                     text: 'CONTINUAR PARA O PAGAMENTO',
-                    //enabled: cubit.state.cartList.isEmpty ? false : true,
-                    onPressed: () {
-                      //cubit.checkOut();
+                    enabled: controller.listCart.isEmpty ? false : true,
+                    onPressed: () async {
+                      bool valid = false;
+                      await Get.defaultDialog(
+                        title: 'Validando Carrinho',
+                        content: FutureBuilder<bool>(
+                          future: controller.validCart(),
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              valid = snap.data!;
+                              Get.back();
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                        ),
+                      );
+                      valid ? Get.toNamed(AppPages.CHECKOUT) : '';
                     },
                   ),
                 ],
