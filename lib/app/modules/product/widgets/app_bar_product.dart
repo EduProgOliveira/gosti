@@ -34,7 +34,7 @@ class AppBarProduct extends StatelessWidget {
               ],
             ),
           ),
-          const CartButton(),
+          CartButton(),
         ],
       ),
     );

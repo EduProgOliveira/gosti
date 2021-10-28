@@ -3,7 +3,7 @@ import 'package:gosti_mobile/app/modules/cart/models/cart.dart';
 import 'package:gosti_mobile/app/modules/product/models/product.dart';
 
 class CartController extends GetxController {
-  List<CartItem> listCart = [];
+  List<CartItem> listCart = <CartItem>[].obs;
   double total = 0.00;
   num totalItens = 0;
 
@@ -62,6 +62,7 @@ class CartController extends GetxController {
 
     total = somar(listCart);
     totalItens = totalItems(listCart);
+    update();
   }
 
   remove({required int id, int newQtd = 1}) {
@@ -87,6 +88,7 @@ class CartController extends GetxController {
         totalItens = totalItems(listCart);
       }
     }
+    update();
   }
 
   num totalItems(List<CartItem> listCart) =>

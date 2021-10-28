@@ -20,120 +20,126 @@ class ProductList extends StatelessWidget {
 }
 
 Widget producItem(Product product) {
-  ProductController controller = Get.find<ProductController>();
-  CartController cartController = Get.find<CartController>();
+  ProductController productController = Get.find<ProductController>();
+//  CartController controller = Get.find<CartController>();
   return GestureDetector(
     onTap: () async {
-      await controller.loadProduct(idProduct: product.id!);
+      await productController.loadProduct(idProduct: product.id!);
       Get.to(() => ProductDetails(product: product));
     },
-    child: Container(
-      padding: const EdgeInsets.only(top: 5, left: 10),
-      height: 75,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.grey,
+    child: GetBuilder<CartController>(builder: (controller) {
+      return Container(
+        padding: const EdgeInsets.only(top: 5, left: 10),
+        height: 75,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: AppColors.grey,
+            ),
           ),
         ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                    child: Text(
-                  product.nome!,
-                  style: TextStyle(
-                    fontSize: 12,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                      child: Text(
+                    product.nome!,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  )),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.help_outline_rounded,
+                        color: AppColors.primaryColor,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        'Disponível',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 10,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        '${controller.checkQtdAvailable(product)}',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          if (controller.checkQtdAvailable(product) < 1) {
+                            Get.snackbar(
+                                'Não está disponivel!', "${product.nome}",
+                                backgroundColor: Colors.red[300],
+                                colorText: Colors.white);
+                          } else {
+                            controller.addItem(
+                              id: product.id!,
+                              name: product.nome!,
+                              price: product.preco!,
+                              qtdAvailable: product.saldo!.saldo!,
+                            );
+                            Get.snackbar(
+                                'Adicionado ao carrinho!', "${product.nome}",
+                                backgroundColor: Colors.green[300],
+                                colorText: Colors.white);
+                          }
+                        },
+                        icon: const Image(
+                          image: AssetImage('assets/icons/carrinho1.png'),
+                          width: 25,
+                          height: 25,
+                        ),
+                      ),
+                      Text(
+                        NumberFormat.currency(
+                          name: 'R\$ ',
+                          decimalDigits: 2,
+                        ).format(product.preco),
+                        style: AppTextStyles.priceFoodItemBold,
+                      ),
+                    ],
                   ),
-                )),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.help_outline_rounded,
-                      color: AppColors.primaryColor,
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      'Disponível',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 10,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      '${cartController.checkQtdAvailable(product)}',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        if (cartController.checkQtdAvailable(product) < 1) {
-                          Get.snackbar(
-                              '${product.nome}', ' não está disponivel');
-                        } else {
-                          cartController.addItem(
-                            id: product.id!,
-                            name: product.nome!,
-                            price: product.preco!,
-                            qtdAvailable: product.saldo!.saldo!,
-                          );
-                          Get.snackbar(
-                              '${product.nome}', ' Adicionado ao carrinho !');
-                        }
-                      },
-                      icon: const Image(
-                        image: AssetImage('assets/icons/carrinho1.png'),
-                        width: 25,
-                        height: 25,
-                      ),
-                    ),
-                    Text(
-                      NumberFormat.currency(
-                        name: 'R\$ ',
-                        decimalDigits: 2,
-                      ).format(product.preco),
-                      style: AppTextStyles.priceFoodItemBold,
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Image.network(
-              product.img1!,
-              fit: BoxFit.fitWidth,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
+            Expanded(
+              child: Image.network(
+                product.img1!,
+                fit: BoxFit.fitWidth,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    ),
+          ],
+        ),
+      );
+    }),
   );
 }
