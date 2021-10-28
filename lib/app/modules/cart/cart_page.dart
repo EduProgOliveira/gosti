@@ -57,8 +57,7 @@ class CartPage extends StatelessWidget {
                     text: 'CONTINUAR PARA O PAGAMENTO',
                     enabled: controller.listCart.isEmpty ? false : true,
                     onPressed: () async {
-                      Get.toNamed(AppPages.CHECKOUT);
-                      /* bool valid = false;
+                      bool valid = false;
                       await Get.defaultDialog(
                         title: 'Validando Carrinho',
                         content: FutureBuilder<bool>(
@@ -75,21 +74,22 @@ class CartPage extends StatelessWidget {
                         ),
                       );
                       await Future.delayed(const Duration(seconds: 2));
-                      valid
-                          ? Get.toNamed(AppPages.CHECKOUT)
-                          : await Get.defaultDialog(
-                              title: 'Itens esgotado(s)',
-                              content: Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      CartList(
-                                          listCart: controller.listCartEmpty),
-                                    ],
-                                  ),
-                                ),
+                      if (!valid) {
+                        Get.toNamed(AppPages.CHECKOUT);
+                      } else {
+                        await Get.defaultDialog(
+                          title: 'Itens esgotado(s)',
+                          content: Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  CartList(listCart: controller.listCartEmpty),
+                                ],
                               ),
-                            );*/
+                            ),
+                          ),
+                        );
+                      }
                     },
                   ),
                 ],

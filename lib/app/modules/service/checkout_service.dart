@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:gosti_mobile/app/modules/checkout/models/card_token.dart';
 import 'package:gosti_mobile/app/modules/checkout/models/payment.dart';
@@ -8,35 +10,27 @@ class CheckoutService {
   Dio _dio = Dio();
 
   doPayment({required Payment payment}) async {
+    print('============== PAG ============= ');
+    print(payment.additionalInfo!.items!.length);
     Response response = await _dio.post(
-      AppUrls.WS_MP + '/payments',
-      data: payment.toJson(),
-      options: Options(
-        headers: {
-          "Authentication": "Bearer " + AppConfigMP.ACCESS_TOKEN_TEST,
-        },
-      ),
+      AppUrls.WS_MP + '/payments?access_token=' + AppConfigMP.ACCESS_TOKEN_TEST,
+      data: jsonEncode(payment),
     );
     if (response.statusCode == 201) {
-      print(response.data);
+      print(response.data['status']);
       return response.data['status'];
     }
-    return null;
+    return false;
   }
 
   cardToken({required CardToken card}) async {
     try {
       Response response = await _dio.post(
-        AppUrls.WS_MP + '/card_tokens',
-        data: card.toJson(),
-        options: Options(
-          headers: {
-            "Authentication": "Bearer " + AppConfigMP.ACCESS_TOKEN_TEST,
-          },
-        ),
+        AppUrls.WS_MP +
+            '/card_tokens?access_token=' +
+            AppConfigMP.ACCESS_TOKEN_TEST,
+        data: jsonEncode(card),
       );
-
-      print(response);
 
       if (response.statusCode == 201) {
         return response.data['id'];

@@ -27,8 +27,10 @@ class CheckoutController extends GetxController {
   String cardBand = '';
 
   Future<bool> payment() async {
+    await Future.delayed(const Duration(seconds: 3));
     int? mes = int.parse(cardValid.text.substring(0, 2));
     int? ano = int.parse(cardValid.text.substring(3, 7));
+    String email = await AppPreferences.EMAIL();
 
     CardToken cardToken = CardToken(
       cardholder: Cardholder(
@@ -51,7 +53,7 @@ class CheckoutController extends GetxController {
           "Pedido ${token.toString().substring(0, 6)} ${cartController.total} reais",
       installments: 1,
       paymentMethodId: cardBand,
-      payer: Payer(email: await AppPreferences.EMAIL()),
+      payer: Payer(email: email),
       externalReference:
           "Pedido${token.toString().substring(0, 6)}${cartController.total}",
       additionalInfo: AdditionalInfo(
@@ -68,7 +70,9 @@ class CheckoutController extends GetxController {
       ),
     );
     var status = await _service.doPayment(payment: payment);
-    print(status);
-    return true;
+    if (status == 'approved') {
+      return true;
+    }
+    return false;
   }
 }
