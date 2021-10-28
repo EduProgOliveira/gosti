@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_colors.dart';
 import 'package:gosti_mobile/app/modules/cart/cart_controller.dart';
+import 'package:gosti_mobile/app_pages.dart';
 
 class CartButton extends StatelessWidget {
   CartButton({Key? key}) : super(key: key);
@@ -36,7 +37,9 @@ class CartButton extends StatelessWidget {
             );
           }),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed(AppPages.CART);
+            },
             icon: Image.asset('assets/icons/carrinho.png'),
           ),
         ],
