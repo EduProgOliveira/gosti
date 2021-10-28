@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_colors.dart';
 import 'package:gosti_mobile/app/core/app_images.dart';
 import 'package:gosti_mobile/app/core/common_widgets/default_elevated_button.dart';
@@ -12,6 +13,7 @@ import 'package:gosti_mobile/app/core/common_widgets/default_text_button.dart';
 import 'package:gosti_mobile/app/core/common_widgets/image_elevated_button.dart';
 import 'package:gosti_mobile/app/modules/login/cubit/login_cubit.dart';
 import 'package:gosti_mobile/app/modules/verification_code/view/verification_code_page.dart';
+import 'package:gosti_mobile/app_pages.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -151,7 +153,7 @@ class _LoginFormState extends State<LoginForm> {
                       bloc: bloc,
                     ),
                     const SizedBox(height: 8.0),
-                    const _GoogleSignUp(),
+                    _GoogleSignUp(),
                     const SizedBox(height: 8.0),
                     _FacebookSignUp(),
                     const SizedBox(height: 4.0),
@@ -163,6 +165,7 @@ class _LoginFormState extends State<LoginForm> {
                 child: DefaultTextButton(
                   text: '+ NOVO CADASTRO',
                   onPressed: () {
+                    Get.toNamed(AppPages.SIGNUP);
                     //Modular.to.navigate('/sign/');
                   },
                 ),
@@ -332,7 +335,7 @@ class _LoginButtonState extends State<_LoginButton> {
 
                   if (await widget.bloc.logInWithCredentials()) {
                     loading = false;
-                    //Modular.to.navigate('/initial/');
+                    Get.offAndToNamed(AppPages.HOME);
                   }
                   loading = false;
                   setState(() {});
@@ -386,12 +389,12 @@ class _ForgotPassword extends StatelessWidget {
 }
 
 class _GoogleSignUp extends StatelessWidget {
-  const _GoogleSignUp();
+  final LoginCubit bloc = LoginCubit();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      //bloc: Modular.get<LoginCubit>(),
+      bloc: bloc,
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return ImageElevatedButton(
@@ -406,10 +409,11 @@ class _GoogleSignUp extends StatelessWidget {
 }
 
 class _FacebookSignUp extends StatelessWidget {
+  final LoginCubit bloc = LoginCubit();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      //bloc: Modular.get<LoginCubit>(),
+      bloc: bloc,
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return ImageElevatedButton(

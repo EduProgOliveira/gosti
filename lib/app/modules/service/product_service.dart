@@ -10,7 +10,7 @@ class ProductService {
       Response response = await dio.get(
         AppUrls.WS_BASE + AppUrls.PRODUCT + '/$idProduct',
         options: Options(
-          headers: {"Authorization": "Bearer ${AppPreferences.TOKEN}"},
+          headers: {"Authorization": "Bearer ${await AppPreferences.TOKEN()}"},
         ),
       );
       if (response.statusCode == 200) {
@@ -27,7 +27,7 @@ class ProductService {
       Response response = await dio.get(
         AppUrls.WS_BASE + AppUrls.PRODUCT_LIST + '/$idEquip',
         options: Options(
-          headers: {"Authorization": "Bearer ${AppPreferences.TOKEN}"},
+          headers: {"Authorization": "Bearer ${await AppPreferences.TOKEN()}"},
         ),
       );
       if (response.statusCode == 200) {

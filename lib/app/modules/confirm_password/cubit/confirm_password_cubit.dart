@@ -48,10 +48,7 @@ class ConfirmPasswordCubit extends Cubit<ConfirmPasswordState> {
     required String email,
     required String phone,
   }) async {
-    print('senha nova cubit');
-    print(code);
-    print(email);
-    print(phone);
+    
     try {
       await _authenticationRepository.setPassword(
         code: code,

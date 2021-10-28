@@ -11,7 +11,7 @@ class FreezerService {
         AppUrls.WS_BASE + AppUrls.FREEZER,
         data: {"latitude": -24.152495, "longitude": -49.824729, "maximo": 2000},
         options: Options(
-          headers: {"Authorization": "Bearer ${AppPreferences.TOKEN}"},
+          headers: {"Authorization": "Bearer ${await AppPreferences.TOKEN()}"},
         ),
       );
       if (response.statusCode == 200) {

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:gosti_mobile/app/core/errors/failures.dart';
 import 'package:gosti_mobile/app/modules/authentication/models/user.dart';
 import 'package:gosti_mobile/app/modules/authentication/utils/shared_prefs.dart';
+import 'package:gosti_mobile/app_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const GOSTI_URL = 'http://gostiws.gesct.com.br:14335';
@@ -120,6 +121,7 @@ class AuthenticationRepository {
 
   Future<bool> verify() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     bool token = prefs.getBool('keepConnected')!;
     if (token) {
       var password = prefs.getString('password');
@@ -167,13 +169,16 @@ class AuthenticationRepository {
 
       await Future.delayed(const Duration(seconds: 1), () async {
         if (response.statusCode == 200) {
-          prefs.setString('token', '${response.data!['data']['token']}');
+          AppPreferences.token(response.data!['data']['token']);
           if (keepConnected) {
-            prefs.setBool('keepConnected', keepConnected);
-            phone != null && phone.length > 3
-                ? prefs.setString('phone', phone)
-                : prefs.setString('email', email!);
-            prefs.setString('password', password);
+            AppPreferences.id(response.data!['data']['idCli']);
+            AppPreferences.mensagem(response.data!['mensagem']);
+            AppPreferences.validade(response.data!['data']['validade']);
+            AppPreferences.email(email!);
+            AppPreferences.password(password);
+            AppPreferences.phone(phone!);
+            AppPreferences.keepConnected(keepConnected);
+            
             return true;
           }
           return true;

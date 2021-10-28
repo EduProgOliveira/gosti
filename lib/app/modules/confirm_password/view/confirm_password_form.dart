@@ -7,6 +7,7 @@ import 'package:gosti_mobile/app/core/app_text_styles.dart';
 import 'package:gosti_mobile/app/core/common_widgets/default_elevated_button.dart';
 import 'package:gosti_mobile/app/modules/authentication/repository.dart';
 import 'package:gosti_mobile/app/modules/confirm_password/cubit/confirm_password_cubit.dart';
+import 'package:gosti_mobile/app_pages.dart';
 
 class ConfirmPasswordForm extends StatefulWidget {
   final String email;
@@ -298,7 +299,7 @@ class _ConfirmPasswordButton extends StatelessWidget {
                             backgroundColor: Colors.green,
                             content: Text('Senha alterada com Sucesso !')),
                       );
-                    //Modular.to.popAndPushNamed('/login/');
+                    Get.offAndToNamed(AppPages.LOGIN);
                   } else {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
