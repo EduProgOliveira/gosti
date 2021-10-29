@@ -20,7 +20,7 @@ class FreezerService {
       var response = await dio.post(
         AppUrls.WS_BASE + AppUrls.FREEZER,
         data: {
-          "latitude": position.altitude,
+          "latitude": position.latitude,
           "longitude": position.longitude,
           "maximo": 2000
         },

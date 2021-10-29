@@ -159,7 +159,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             children: [
                               Row(
                                 children: const [
-                                  Text('Vencimento'),
+                                  Text('Validade'),
                                   Text(
                                     ' *',
                                     style: TextStyle(color: Colors.red),
@@ -374,7 +374,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           await Get.defaultDialog(
                             barrierDismissible: false,
                             title:
-                                'Aguarde...processando seu pagamento junto com a operadora...',
+                                'Aguarde...processando o seu pagamento junto a operadora...',
                             content: CircularProgressIndicator(),
                           );
                           await Future.delayed(
@@ -389,7 +389,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         child: TextButton(
                                           onPressed: () async {
                                             valid = true;
-                                            Get.offAndToNamed(AppPages.HOME);
+                                            Get.offNamedUntil(AppPages.HOME,
+                                                (route) => false);
                                           },
                                           child: Text(
                                             'OK',

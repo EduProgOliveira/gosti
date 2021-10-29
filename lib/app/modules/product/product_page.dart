@@ -60,6 +60,12 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 6,
@@ -99,11 +105,14 @@ class _ProductPageState extends State<ProductPage> {
                     controller: scrollController,
                     child: Column(
                       children: [
-                        Categoria(titulo: 'Acompanhamentos', index: categorias[0]),
-                        ProductList(listProduct: controller.listAcompanhamentos),
+                        Categoria(
+                            titulo: 'Acompanhamentos', index: categorias[0]),
+                        ProductList(
+                            listProduct: controller.listAcompanhamentos),
                         Categoria(titulo: 'Carnes', index: categorias[1]),
                         ProductList(listProduct: controller.listCarnes),
-                        Categoria(titulo: 'Especialidade', index: categorias[2]),
+                        Categoria(
+                            titulo: 'Especialidade', index: categorias[2]),
                         ProductList(listProduct: controller.listEspecialidades),
                         Categoria(titulo: 'Fit', index: categorias[3]),
                         ProductList(listProduct: controller.listFit),

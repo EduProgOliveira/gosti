@@ -36,7 +36,10 @@ class CheckoutController extends GetxController {
     await Future.delayed(const Duration(seconds: 3));
     int? mes = int.parse(cardValid.text.substring(0, 2));
     int? ano = int.parse(cardValid.text.substring(3, 7));
-    String email = await AppPreferences.EMAIL();
+    String email = 'teste@teste.com';
+    if (AppPreferences.getEmail != '') {
+      email = AppPreferences.getEmail!;
+    }
 
     CardToken cardToken = CardToken(
       cardholder: Cardholder(
@@ -52,6 +55,12 @@ class CheckoutController extends GetxController {
       securityCode: cardCode.text,
     );
     var token = await _service.cardToken(card: cardToken);
+    if (token == null) {
+      status.value = StatusCheck.fail;
+      update();
+      Get.back();
+      return;
+    }
     Payment payment = Payment(
       transactionAmount: cartController.total,
       token: token,
@@ -77,8 +86,8 @@ class CheckoutController extends GetxController {
     var response = await _service.doPayment(payment: payment);
     var msg = AppMsgMP();
     msg.msg(
-        id: response['id'],
-        msg: response['status'],
+        id: response['id'] ?? 0,
+        msg: response['status'] ?? '',
         msg_details: response['status_detail']);
     response['status'] == "approved"
         ? status.value = StatusCheck.success

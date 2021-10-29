@@ -59,7 +59,7 @@ class AppMsgMP {
           return currentStatus =
               "id $id' cc_rejected_insufficient_amount O cartão possui saldo insuficiente.";
         }
-        return currentStatus = "Cartão Rejeitado";
+        return currentStatus = "";
       default:
         return currentStatus = "MENSAGENS COSTOMIZADAS";
     }

@@ -2,7 +2,7 @@ name: gosti_mobile
 description: A new Flutter project.
 
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.19+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -32,7 +32,7 @@ dependencies:
   formz: ^0.4.0
 
   get: ^4.3.8
-  
+  geolocator: ^7.7.1
   google_fonts: ^2.1.0
 
   http: ^0.13.4
@@ -50,8 +50,7 @@ dependencies:
   url_launcher: ^6.0.9
 
   webview_flutter: ^2.0.10
-  geolocator: ^7.7.1
-  
+    
 
   
 dev_dependencies:
