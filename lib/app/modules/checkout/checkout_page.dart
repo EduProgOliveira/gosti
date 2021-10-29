@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
+import 'package:gosti_mobile/app/core/app_colors.dart';
 import 'package:gosti_mobile/app/core/app_text_styles.dart';
 import 'package:gosti_mobile/app/core/common_widgets/button_default_payment.dart';
 import 'package:gosti_mobile/app/core/utils/check_card.dart';
@@ -10,6 +11,7 @@ import 'package:gosti_mobile/app/modules/checkout/checkout_controller.dart';
 import 'package:gosti_mobile/app/modules/checkout/widgets/app_bar_checkout.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/verification_code/view/verification_code_page.dart';
+import 'package:gosti_mobile/app_msg_mp.dart';
 import 'package:gosti_mobile/app_pages.dart';
 import 'package:intl/intl.dart';
 
@@ -368,29 +370,42 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         text: 'PAGAR PEDIDO',
                         onPressed: () async {
                           bool valid = false;
+                          controller.payment();
                           await Get.defaultDialog(
-                            title: 'Validando Pagamento',
-                            content: FutureBuilder<bool>(
-                              future: controller.payment(),
-                              builder: (context, snap) {
-                                if (snap.hasData) {
-                                  valid = snap.data!;
-                                  Get.back();
-                                }
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              },
-                            ),
+                            barrierDismissible: false,
+                            title:
+                                'Aguarde...processando seu pagamento junto com a operadora...',
+                            content: CircularProgressIndicator(),
                           );
-                          await Future.delayed(const Duration(seconds: 2));
-                          valid
-                              ? Get.toNamed(AppPages.HOME)
-                              : Get.defaultDialog(
-                                  title: 'Erro no pagamento',
+                          await Future.delayed(
+                              const Duration(milliseconds: 500));
+                          controller.status.value == StatusCheck.success
+                              ? Get.defaultDialog(
+                                  title: AppMsgMP.currentStatus ??
+                                      'Mensagem nao iniciada',
                                   content: Center(
-                                    child:
-                                        Text('Verifique a forma de pagamento'),
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        Get.back();
+                                      },
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        elevation: 2,
+                                        backgroundColor: AppColors.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Get.defaultDialog(
+                                  title: 'Erro no Pagamento',
+                                  content: Center(
+                                    child: Text(
+                                      AppMsgMP.currentStatus ??
+                                          'Mensagem nao iniciada',
+                                    ),
                                   ),
                                 );
                         },

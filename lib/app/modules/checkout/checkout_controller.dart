@@ -8,11 +8,15 @@ import 'package:gosti_mobile/app/modules/checkout/models/checkout.dart';
 import 'package:gosti_mobile/app/modules/checkout/models/payment.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/service/checkout_service.dart';
+import 'package:gosti_mobile/app_msg_mp.dart';
 import 'package:gosti_mobile/app_preferences.dart';
+
+enum StatusCheck { loading, fail, success, start }
 
 class CheckoutController extends GetxController {
   Checkout checkout = Checkout();
   CheckoutService _service = CheckoutService();
+  var status = StatusCheck.start.obs;
 
   FreezerController freezerController = Get.find<FreezerController>();
   CartController cartController = Get.find<CartController>();
@@ -26,7 +30,9 @@ class CheckoutController extends GetxController {
   var cardValid = MaskedTextController(mask: '00/0000');
   String cardBand = '';
 
-  Future<bool> payment() async {
+  payment() async {
+    status.value = StatusCheck.loading;
+    update();
     await Future.delayed(const Duration(seconds: 3));
     int? mes = int.parse(cardValid.text.substring(0, 2));
     int? ano = int.parse(cardValid.text.substring(3, 7));
@@ -69,10 +75,18 @@ class CheckoutController extends GetxController {
         ],
       ),
     );
-    var status = await _service.doPayment(payment: payment);
-    if (status == 'approved') {
-      return true;
-    }
-    return false;
+    var response = await _service.doPayment(payment: payment);
+    var msg = AppMsgMP();
+    msg.msg(
+        id: response['id'],
+        msg: response['status'],
+        msg_details: response['status_detail']);
+    response['status'] == "approved"
+        ? status.value = StatusCheck.success
+        : StatusCheck.fail;
+    print(status.value);
+    update();
+    Get.back();
+    return;
   }
 }

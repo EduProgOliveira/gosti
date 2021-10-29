@@ -73,12 +73,12 @@ class CartPage extends StatelessWidget {
                           },
                         ),
                       );
-                      await Future.delayed(const Duration(seconds: 2));
+                      await Future.delayed(const Duration(milliseconds: 500));
                       if (valid) {
                         Get.toNamed(AppPages.CHECKOUT);
                       } else {
                         await Get.defaultDialog(
-                          title: 'Itens esgotado(s)',
+                          title: 'Itens esgotado(s) *TEM MANUTENÇÃO',
                           content: Expanded(
                             child: SingleChildScrollView(
                               child: Column(

@@ -9,18 +9,22 @@ import 'package:gosti_mobile/app_urls.dart';
 class CheckoutService {
   Dio _dio = Dio();
 
-  doPayment({required Payment payment}) async {
-    print('============== PAG ============= ');
-    print(payment.additionalInfo!.items!.length);
-    Response response = await _dio.post(
-      AppUrls.WS_MP + '/payments?access_token=' + AppConfigMP.ACCESS_TOKEN_TEST,
-      data: jsonEncode(payment),
-    );
-    if (response.statusCode == 201) {
-      print(response.data['status']);
-      return response.data['status'];
+  Future doPayment({required Payment payment}) async {
+    try {
+      Response response = await _dio.post(
+        AppUrls.WS_MP +
+            '/payments?access_token=' +
+            AppConfigMP.ACCESS_TOKEN_TEST,
+        data: jsonEncode(payment),
+      );
+      if (response.statusCode == 201) {
+        print(response.data['status']);
+        return response.data;
+      }
+    } on DioError catch (e) {
+      print(e);
+      return {};
     }
-    return false;
   }
 
   cardToken({required CardToken card}) async {

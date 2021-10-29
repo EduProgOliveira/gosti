@@ -40,6 +40,7 @@ class AppWidget extends StatelessWidget {
 }
 
 checkAuth() async {
+  await AppPreferences.loadPrefs();
   AppStatus.APP_STATUS = AppState.loading;
   await Future.delayed(const Duration(seconds: 3));
   await AppPreferences.TOKEN().then((token) => token.isNotEmpty
