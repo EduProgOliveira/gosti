@@ -10,6 +10,7 @@ import 'package:gosti_mobile/app/modules/checkout/checkout_controller.dart';
 import 'package:gosti_mobile/app/modules/checkout/widgets/app_bar_checkout.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/verification_code/view/verification_code_page.dart';
+import 'package:gosti_mobile/app_pages.dart';
 import 'package:intl/intl.dart';
 
 enum MethodPayment { credit, debit, pix }
@@ -127,7 +128,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                     Row(
                       children: const [
-                        Text('Nome completo do titular do cartão'),
+                        Text('Nome do titula como está no cartão'),
                         Text(
                           ' *',
                           style: TextStyle(color: Colors.red),
@@ -156,7 +157,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             children: [
                               Row(
                                 children: const [
-                                  Text('Data de vencimento'),
+                                  Text('Vencimento'),
                                   Text(
                                     ' *',
                                     style: TextStyle(color: Colors.red),
@@ -382,6 +383,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               },
                             ),
                           );
+                          await Future.delayed(const Duration(seconds: 2));
+                          valid
+                              ? Get.toNamed(AppPages.HOME)
+                              : Get.defaultDialog(
+                                  title: 'Erro no pagamento',
+                                  content: Center(
+                                    child:
+                                        Text('Verifique a forma de pagamento'),
+                                  ),
+                                );
                         },
                       ),
                     ),

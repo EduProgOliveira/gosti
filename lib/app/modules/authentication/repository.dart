@@ -44,35 +44,6 @@ class AuthenticationRepository {
     }
   }
 
-  Future<bool> login({
-    String? email,
-    String? phone,
-    required String password,
-    bool keepConnected = false,
-  }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      Response response = await dio.post<Map<String, dynamic>>(
-        '$GOSTI_URL/cliaut/login',
-        data: {
-          'email': email,
-          'telefone': phone,
-          'password': password,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        User user = User.fromJson(response.data['data']);
-        prefs.setString('token', '${user.token}');
-
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
   Future<bool> signUp({
     String? email,
     String? phone,
@@ -148,6 +119,40 @@ class AuthenticationRepository {
     return true;
   }
 
+  static Future<String> reLogin(
+      {String? email, String? phone, required String password}) async {
+    Dio _dio = Dio();
+    DateTime dateTime = DateTime.now();
+    String? newToken;
+    try {
+      final response = await _dio.post<Map<dynamic, dynamic>>(
+        '$GOSTI_URL/cliaut/login',
+        data: {
+          'email': email,
+          'telefone': phone,
+          'password': password,
+        },
+      );
+
+      await Future.delayed(const Duration(seconds: 1), () async {
+        if (response.statusCode == 200) {
+          AppPreferences.token(response.data!['data']['token']);
+          AppPreferences.id(response.data!['data']['idCli']);
+          AppPreferences.mensagem(response.data!['mensagem']);
+          AppPreferences.validade(dateTime.toString());
+          AppPreferences.email(email!);
+          AppPreferences.password(password);
+          AppPreferences.phone(phone!);
+          AppPreferences.keepConnected(true);
+          newToken = response.data!['data']['token'];
+        }
+      });
+      return newToken!;
+    } on DioError catch (e) {
+      throw LogInWithEmailAndPasswordFailure();
+    }
+  }
+
   Future<bool> logInWithEmailOrPhoneAndPassword({
     String? email,
     String? phone,
@@ -155,8 +160,7 @@ class AuthenticationRepository {
     bool keepConnected = false,
     bool enableFirebase = true,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    DateTime dateTime = DateTime.now();
     try {
       final response = await dio.post<Map<dynamic, dynamic>>(
         '$GOSTI_URL/cliaut/login',
@@ -170,17 +174,12 @@ class AuthenticationRepository {
       await Future.delayed(const Duration(seconds: 1), () async {
         if (response.statusCode == 200) {
           AppPreferences.token(response.data!['data']['token']);
-          if (keepConnected) {
-            AppPreferences.id(response.data!['data']['idCli']);
-            AppPreferences.mensagem(response.data!['mensagem']);
-            AppPreferences.validade(response.data!['data']['validade']);
-            AppPreferences.email(email!);
-            AppPreferences.password(password);
-            AppPreferences.phone(phone!);
-            AppPreferences.keepConnected(keepConnected);
-            
-            return true;
-          }
+          AppPreferences.id(response.data!['data']['idCli']);
+          AppPreferences.validade(dateTime.toString());
+          AppPreferences.email(email!);
+          AppPreferences.password(password);
+          AppPreferences.phone(phone!);
+          AppPreferences.keepConnected(keepConnected);
           return true;
         }
       });

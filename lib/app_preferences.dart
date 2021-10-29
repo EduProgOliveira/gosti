@@ -1,3 +1,4 @@
+import 'package:gosti_mobile/app/modules/authentication/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreferences {
@@ -29,7 +30,39 @@ class AppPreferences {
   static Future<String> TOKEN() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token') ?? '';
+    bool keepConnected = prefs.getBool('keepConnected') ??  false;
+    
+    if(token.isEmpty){
+      return '';
+    }
+    if(!await VALDADE_CHECK_TOKEN()){
+      if(keepConnected){
+          if(token.isNotEmpty){
+          var email = await EMAIL();
+          var phone = await PHONE();
+          var password = await PASSWORD();
+          return await AuthenticationRepository.reLogin(email: email,phone: phone,password: password);
+        }
+        return '';
+      }
+      return '';
+    }
     return token;
+  }
+
+  static Future<bool> VALDADE_CHECK_TOKEN() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime now = DateTime.now();
+    String validade = prefs.getString('validade') ?? '';
+
+    if(validade.isNotEmpty) {
+      var val = DateTime.parse(validade);
+      if(now.difference(val).inHours == 1){
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   static Future<int> ID() async {
@@ -65,6 +98,8 @@ class AppPreferences {
   static Future<String> VALIDADE() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var validade = prefs.getString('validade') ?? '';
+    print('validae');
+    print(validade);
     return validade;
   }
 

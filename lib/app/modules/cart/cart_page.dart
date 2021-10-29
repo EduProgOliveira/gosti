@@ -74,7 +74,7 @@ class CartPage extends StatelessWidget {
                         ),
                       );
                       await Future.delayed(const Duration(seconds: 2));
-                      if (!valid) {
+                      if (valid) {
                         Get.toNamed(AppPages.CHECKOUT);
                       } else {
                         await Get.defaultDialog(
