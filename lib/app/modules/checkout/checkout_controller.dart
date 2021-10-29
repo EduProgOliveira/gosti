@@ -66,8 +66,7 @@ class CheckoutController extends GetxController {
         items: [
           Items(
             id: "${freezerController.freezer().nome}  ${cartController.total}",
-            title:
-                "Pedido ${token.toString().substring(0, 6)} ${cartController.total}",
+            title: "Pedido ${cartController.pedido} ${cartController.total}",
             categoryId: "Gosti",
             quantity: 1,
             unitPrice: cartController.total,
@@ -84,7 +83,6 @@ class CheckoutController extends GetxController {
     response['status'] == "approved"
         ? status.value = StatusCheck.success
         : StatusCheck.fail;
-    print(status.value);
     update();
     Get.back();
     return;

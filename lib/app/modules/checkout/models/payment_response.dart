@@ -23,15 +23,25 @@ class PaymentResponse {
       this.autorizacao,
       this.observacao});
 
-  PaymentResponse.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
+  PaymentResponse.fromJson(Map<String, dynamic> json, int pedido) {
+    DateTime dat;
+    String date = '';
+    if (json['date_approved'] != null) {
+      dat = DateTime.parse(json['date_approved']);
+      date = '${dat.day}' + '/' + '${dat.month}' + '/' + '${dat.year}';
+    } else {
+      dat = DateTime.now();
+      date = '${dat.day}' + '/' + '${dat.month}' + '/' + '${dat.year}';
+    }
+
+    status = json['status'] == "approved" ? true : false;
     idCli = AppPreferences.getId;
-    idPedido = json['id'];
+    idPedido = pedido;
     valorTotal = json['transaction_amount'];
     adquirente = 'Mercado Pago';
     bandeira = json['payment_method_id'];
-    dataAprovacao = json['date_approved'];
-    autorizacao = "id" + json['id'];
+    dataAprovacao = date;
+    autorizacao = "id" + json['id'].toString();
     observacao = AppMsgMP.currentStatus;
   }
 

@@ -13,6 +13,7 @@ class CartController extends GetxController {
   List<CartItem> listCartEmpty = <CartItem>[].obs;
   double total = 0.00;
   num totalItens = 0;
+  int pedido = 0;
 
   Future<bool> validCart() async {
     List<Itens> itensTemp = [];
@@ -35,6 +36,7 @@ class CartController extends GetxController {
     ));
 
     if (response.status == true) {
+      pedido = response.idPedido!;
       return true;
     }
 

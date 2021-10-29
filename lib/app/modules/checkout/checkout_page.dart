@@ -383,20 +383,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ? Get.defaultDialog(
                                   title: AppMsgMP.currentStatus ??
                                       'Mensagem nao iniciada',
-                                  content: Center(
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        Get.back();
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: TextStyle(color: Colors.white),
+                                  content: Column(
+                                    children: [
+                                      Center(
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            valid = true;
+                                            Get.offAndToNamed(AppPages.HOME);
+                                          },
+                                          child: Text(
+                                            'OK',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            elevation: 2,
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          ),
+                                        ),
                                       ),
-                                      style: TextButton.styleFrom(
-                                        elevation: 2,
-                                        backgroundColor: AppColors.primaryColor,
-                                      ),
-                                    ),
+                                    ],
                                   ),
                                 )
                               : Get.defaultDialog(
