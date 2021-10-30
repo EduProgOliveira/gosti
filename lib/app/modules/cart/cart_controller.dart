@@ -15,6 +15,14 @@ class CartController extends GetxController {
   num totalItens = 0;
   int pedido = 0;
 
+  clear() {
+    listCart = [];
+    listCartEmpty = [];
+    total = 0.00;
+    totalItens = 0;
+    pedido = 0;
+  }
+
   Future<bool> validCart() async {
     List<Itens> itensTemp = [];
     await Future.delayed(const Duration(seconds: 3));

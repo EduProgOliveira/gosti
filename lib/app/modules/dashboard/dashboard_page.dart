@@ -5,8 +5,8 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:gosti_mobile/app/core/app_colors.dart';
 import 'package:gosti_mobile/app/modules/dashboard/dashboard_controller.dart';
 import 'package:gosti_mobile/app/modules/dashboard/pages/dashboard_pages.dart';
+import 'package:gosti_mobile/app/modules/dashboard/widget/mensagem_sheet.dart';
 import 'package:gosti_mobile/app/modules/freezer_pages/freezer_pages_controller.dart';
-import 'package:gosti_mobile/app_pages.dart';
 
 class DashBoardPage extends GetView<DashBoardController> {
   DashBoardPage({Key? key}) : super(key: key);
@@ -15,7 +15,15 @@ class DashBoardPage extends GetView<DashBoardController> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
+        if (pages.pageController.page!.round() == 1 &&
+            pages.cartController.listCart.length > 0) {
+          if (await MensagemSheet.productBack()) {
+            pages.cleanCarController();
+            pages.pageController.jumpToPage(0);
+          }
+          return Future.value(false);
+        }
         if (pages.pageController.page!.round() == 1) {
           pages.pageController.jumpToPage(0);
           return Future.value(false);
@@ -46,8 +54,17 @@ class DashBoardPage extends GetView<DashBoardController> {
           },
           items: [
             GestureDetector(
-              onTap: () {
-                Get.back();
+              onTap: () async {
+                if (pages.pageController.page!.round() == 1 &&
+                    pages.cartController.listCart.length > 0) {
+                  if (await MensagemSheet.productBack()) {
+                    Get.back();
+                  }
+                } else if (pages.pageController.page!.round() == 1) {
+                  Get.back();
+                } else if (pages.pageController.page!.round() == 0) {
+                  Get.back();
+                }
               },
               child: Image.asset(
                 'assets/icons/home.png',
