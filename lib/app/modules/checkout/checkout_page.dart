@@ -9,6 +9,7 @@ import 'package:gosti_mobile/app/core/utils/check_card.dart';
 import 'package:gosti_mobile/app/modules/cart/cart_controller.dart';
 import 'package:gosti_mobile/app/modules/checkout/checkout_controller.dart';
 import 'package:gosti_mobile/app/modules/checkout/widgets/app_bar_checkout.dart';
+import 'package:gosti_mobile/app/modules/checkout/widgets/mensagem_request.dart';
 import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 import 'package:gosti_mobile/app/modules/verification_code/view/verification_code_page.dart';
 import 'package:gosti_mobile/app_msg_mp.dart';
@@ -78,7 +79,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           groupValue: paymentType,
                           onChanged: (TypePayment? value) {},
                         ),
-                        Text('Pague com cartões de cŕedito'),
+                        Text('Pague com cartões'),
                       ],
                     ),
                     const Text(
@@ -130,7 +131,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                     Row(
                       children: const [
-                        Text('Nome do titula como está no cartão'),
+                        Text('Nome do titular como está no cartão'),
                         Text(
                           ' *',
                           style: TextStyle(color: Colors.red),
@@ -319,15 +320,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             fontSize: 10,
                                             color: Colors.grey[500]),
                                       ),
-                                      Text(
-                                        '* ',
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.red),
-                                      ),
-                                      Text(
-                                        'Campos obrigatórios',
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.red),
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            '* ',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                          Text(
+                                            'Campos obrigatórios',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.red),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -379,43 +386,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           );
                           await Future.delayed(
                               const Duration(milliseconds: 500));
-                          controller.status.value == StatusCheck.success
-                              ? Get.defaultDialog(
-                                  title: AppMsgMP.currentStatus ??
-                                      'Mensagem nao iniciada',
-                                  content: Column(
-                                    children: [
-                                      Center(
-                                        child: TextButton(
-                                          onPressed: () async {
-                                            valid = true;
-                                            Get.offNamedUntil(AppPages.HOME,
-                                                (route) => false);
-                                          },
-                                          child: Text(
-                                            'OK',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          style: TextButton.styleFrom(
-                                            elevation: 2,
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Get.defaultDialog(
-                                  title: 'Erro no Pagamento',
-                                  content: Center(
-                                    child: Text(
-                                      AppMsgMP.currentStatus ??
-                                          'Mensagem nao iniciada',
-                                    ),
-                                  ),
-                                );
+                          await MensagemRequest.mensagemRequest(controller);
                         },
                       ),
                     ),

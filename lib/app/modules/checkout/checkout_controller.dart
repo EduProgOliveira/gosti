@@ -65,7 +65,7 @@ class CheckoutController extends GetxController {
       transactionAmount: cartController.total,
       token: token,
       description:
-          "Pedido ${token.toString().substring(0, 6)} ${cartController.total} reais",
+          "Pedido ${cartController.pedido} ${cartController.total} reais",
       installments: 1,
       paymentMethodId: cardBand,
       payer: Payer(email: email),
@@ -88,7 +88,8 @@ class CheckoutController extends GetxController {
     msg.msg(
         id: response['id'] ?? 0,
         msg: response['status'] ?? '',
-        msg_details: response['status_detail']);
+        msg_details: response['status_detail'],
+        requestNumber: cartController.pedido);
     response['status'] == "approved"
         ? status.value = StatusCheck.success
         : StatusCheck.fail;
