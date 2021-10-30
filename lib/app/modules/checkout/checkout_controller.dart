@@ -92,7 +92,7 @@ class CheckoutController extends GetxController {
         requestNumber: cartController.pedido);
     response['status'] == "approved"
         ? status.value = StatusCheck.success
-        : StatusCheck.fail;
+        : status.value = StatusCheck.fail;
     update();
     Get.back();
     return;

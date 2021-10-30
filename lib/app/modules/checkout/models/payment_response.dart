@@ -42,7 +42,7 @@ class PaymentResponse {
     bandeira = json['payment_method_id'];
     dataAprovacao = date;
     autorizacao = "id" + json['id'].toString();
-    observacao = 'AppMsgMP.currentStatus';
+    observacao = AppMsgMP.currentStatus.toString();
   }
 
   Map<String, dynamic> toJson() {

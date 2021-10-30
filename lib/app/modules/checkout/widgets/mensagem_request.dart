@@ -15,8 +15,27 @@ class MensagemRequest {
       title: controller.status.value == StatusCheck.success
           ? 'Pagamento Aprovado'
           : 'Erro no Pagamento',
-      content: controller.status.value == StatusCheck.fail
+      content: controller.status.value == StatusCheck.success
           ? Column(
+              children: [
+                Center(
+                  child: TextButton(
+                    onPressed: () async {
+                      Get.offNamedUntil(AppPages.HOME, (route) => false);
+                    },
+                    child: const Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: TextButton.styleFrom(
+                      elevation: 2,
+                      backgroundColor: AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Column(
               children: [
                 Align(
                   alignment: Alignment.topLeft,
@@ -52,43 +71,8 @@ class MensagemRequest {
                   ),
                 ),
               ],
-            )
-          : Column(
-              children: [
-                Center(
-                  child: TextButton(
-                    onPressed: () async {
-                      Get.offNamedUntil(AppPages.HOME, (route) => false);
-                    },
-                    child: const Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: TextButton.styleFrom(
-                      elevation: 2,
-                      backgroundColor: AppColors.primaryColor,
-                    ),
-                  ),
-                ),
-              ],
             ),
     );
     return '';
-  }
-
-  static listMensagem(CheckoutController controller) {
-    String msg = '';
-    if (controller.status.value == StatusCheck.success) {
-      return 'Suceso';
-    }
-    if (controller.status.value == StatusCheck.fail) {
-      return 'Erro';
-    }
-
-    for (var i = 0; i < AppMsgMP.currentStatus.length; i++) {
-      msg += AppMsgMP.currentStatus[i] + '\n';
-    }
-
-    return msg;
   }
 }

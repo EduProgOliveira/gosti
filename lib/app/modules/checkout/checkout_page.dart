@@ -19,7 +19,8 @@ import 'package:intl/intl.dart';
 enum MethodPayment { credit, debit, pix }
 enum TypePayment { card, pix }
 List<String> ManyPayment = ['1x', '2x'];
-List<String> TypeDoc = ['cpf', 'cnpj'];
+enum TypeDoc { CPF, CNPJ }
+enum AmbTST { prod, test }
 
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({Key? key}) : super(key: key);
@@ -36,11 +37,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   String manyPayment = '1x';
 
-  String typeDoc = 'cpf';
+  TypeDoc typeDoc = TypeDoc.CPF;
 
   String? card_band = '';
 
   TypePayment paymentType = TypePayment.card;
+
+  AmbTST amb = AmbTST.test;
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +63,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      NumberFormat.currency(
-                        name: 'TOTAL À PAGAR: R\$ ',
-                        decimalDigits: 2,
-                      ).format(cartController.total),
-                      style: AppTextStyles.bodyBoldBlack.copyWith(fontSize: 18),
+                    Row(
+                      children: [
+                        Text(
+                          NumberFormat.currency(
+                            name: 'TOTAL À PAGAR: R\$ ',
+                            decimalDigits: 2,
+                          ).format(cartController.total),
+                          style: AppTextStyles.bodyBoldBlack
+                              .copyWith(fontSize: 16),
+                        ),
+                        SizedBox(
+                          width: 18,
+                        ),
+                        Text('TSF'),
+                        Container(
+                          width: 20,
+                          height: 20,
+                          child: Radio(
+                            value: AmbTST.test,
+                            groupValue: amb,
+                            onChanged: (val) {
+                              amb = AmbTST.test;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('PRD'),
+                        Container(
+                          width: 20,
+                          height: 20,
+                          child: Radio(
+                            value: AmbTST.prod,
+                            groupValue: amb,
+                            onChanged: (val) {
+                              amb = AmbTST.prod;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const Divider(
                       height: 5,
@@ -264,19 +304,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             Container(
                               width: 100,
                               margin: EdgeInsets.only(bottom: 20),
-                              child: DropdownButton(
+                              child: DropdownButton<TypeDoc>(
                                 value: typeDoc,
                                 isExpanded: true,
-                                onChanged: (String? newValue) {
-                                  typeDoc = newValue!;
-                                },
-                                items: TypeDoc.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
+                                items: [],
                               ),
                             ),
                           ],
