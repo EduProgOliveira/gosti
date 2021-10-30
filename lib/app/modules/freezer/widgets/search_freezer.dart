@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_text_styles.dart';
+import 'package:gosti_mobile/app/modules/freezer/freezer_controller.dart';
 
 class SearchFreezer extends StatelessWidget {
-  const SearchFreezer({Key? key}) : super(key: key);
+  SearchFreezer({Key? key}) : super(key: key);
+  FreezerController controller = Get.find<FreezerController>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +18,7 @@ class SearchFreezer extends StatelessWidget {
           hintStyle: AppTextStyles.body20.copyWith(fontSize: 16),
           contentPadding: const EdgeInsets.all(10),
         ),
+        onChanged: controller.searchFreezer,
       ),
     );
   }

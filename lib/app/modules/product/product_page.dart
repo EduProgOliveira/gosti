@@ -72,63 +72,138 @@ class _ProductPageState extends State<ProductPage> {
       child: Builder(builder: (context) {
         tabContext = context;
         return Scaffold(
-          body: Obx(() {
-            if (controller.status.value == StatusProduct.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Column(
-              children: [
-                AppBarProduct(),
-                Container(
-                  height: 35,
-                  child: TabBar(
-                    isScrollable: true,
-                    labelStyle: AppTextStyles.bodyBold,
-                    indicatorColor: AppColors.primaryColor,
-                    labelColor: AppColors.primaryColor,
-                    tabs: const [
-                      Tab(child: Text('Acompanhamentos')),
-                      Tab(child: Text('Carnes')),
-                      Tab(child: Text('Especialidades')),
-                      Tab(child: Text('Fit')),
-                      Tab(child: Text('Massas')),
-                      Tab(child: Text('Tradicional')),
-                    ],
-                    onTap: (int index) => scrollTo(index),
-                  ),
+          body: Column(
+            children: [
+              AppBarProduct(),
+              Container(
+                height: 35,
+                child: TabBar(
+                  isScrollable: true,
+                  labelStyle: AppTextStyles.bodyBold,
+                  indicatorColor: AppColors.primaryColor,
+                  labelColor: AppColors.primaryColor,
+                  tabs: const [
+                    Tab(child: Text('Acompanhamentos')),
+                    Tab(child: Text('Carnes')),
+                    Tab(child: Text('Especialidades')),
+                    Tab(child: Text('Fit')),
+                    Tab(child: Text('Massas')),
+                    Tab(child: Text('Tradicional')),
+                  ],
+                  onTap: (int index) => scrollTo(index),
                 ),
-                SearchProduct(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                      children: [
-                        Categoria(
-                            titulo: 'Acompanhamentos', index: categorias[0]),
-                        ProductList(
-                            listProduct: controller.listAcompanhamentos),
-                        Categoria(titulo: 'Carnes', index: categorias[1]),
-                        ProductList(listProduct: controller.listCarnes),
-                        Categoria(
-                            titulo: 'Especialidade', index: categorias[2]),
-                        ProductList(listProduct: controller.listEspecialidades),
-                        Categoria(titulo: 'Fit', index: categorias[3]),
-                        ProductList(listProduct: controller.listFit),
-                        Categoria(titulo: 'Massas', index: categorias[4]),
-                        ProductList(listProduct: controller.listMassas),
-                        Categoria(titulo: 'Tradicional', index: categorias[5]),
-                        ProductList(listProduct: controller.listTradicional),
-                      ],
+              ),
+              SearchProduct(),
+              Obx(() {
+                if (controller.status.value == StatusProduct.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (controller.status.value == StatusProduct.searchFail) {
+                  return const Center(
+                    child: Text('Produto não encontrado'),
+                  );
+                }
+                if (controller.status.value == StatusProduct.search) {
+                  return Expanded(
+                    child: RefreshIndicator(
+                      displacement: 10,
+                      onRefresh: () async {
+                        await Future.delayed(const Duration(seconds: 1));
+                        return await controller.loadListProduct();
+                      },
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: scrollController,
+                        child: Column(
+                          children: checkSearch(categorias, controller),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          }),
+                  );
+                }
+                if (controller.status.value == StatusProduct.load) {
+                  return Expanded(
+                    child: RefreshIndicator(
+                      displacement: 10,
+                      onRefresh: () async {
+                        await Future.delayed(const Duration(seconds: 1));
+                        return await controller.loadListProduct();
+                      },
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        controller: scrollController,
+                        child: Column(
+                          children: check(categorias, controller),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return const Center(
+                  child: Text('Erro ao carregar os produtos'),
+                );
+              }),
+            ],
+          ),
         );
       }),
     );
   }
+}
+
+List<Widget> check(List<GlobalKey> categorias, ProductController controller) {
+  List<Widget> widget = [];
+  List<String> categoriasName = [
+    'Acompanhamentos',
+    'Carnes',
+    'Especialidade',
+    'Fit',
+    'Massas',
+    'Tradicional'
+  ];
+  List<List<Product>> produtos = [
+    controller.listAcompanhamentos,
+    controller.listCarnes,
+    controller.listEspecialidades,
+    controller.listFit,
+    controller.listMassas,
+    controller.listTradicional
+  ];
+  for (var i = 0; i < categorias.length; i++) {
+    if (produtos[i].isNotEmpty) {
+      widget.add(Categoria(titulo: categoriasName[i], index: categorias[i]));
+      widget.add(ProductList(listProduct: produtos[i]));
+    }
+  }
+  return widget;
+}
+
+List<Widget> checkSearch(
+    List<GlobalKey> categorias, ProductController controller) {
+  List<Widget> widget = [];
+  List<String> categoriasName = [
+    'Acompanhamentos',
+    'Carnes',
+    'Especialidade',
+    'Fit',
+    'Massas',
+    'Tradicional'
+  ];
+  List<List<Product>> produtos = [
+    controller.listSearchAcompanhamentos,
+    controller.listSearchCarnes,
+    controller.listSearchEspecialidades,
+    controller.listSearchFit,
+    controller.listSearchMassas,
+    controller.listSearchTradicional
+  ];
+  for (var i = 0; i < categorias.length; i++) {
+    if (produtos[i].isNotEmpty) {
+      widget.add(Categoria(titulo: categoriasName[i], index: categorias[i]));
+      widget.add(ProductList(listProduct: produtos[i]));
+    }
+  }
+  return widget;
 }

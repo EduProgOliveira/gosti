@@ -29,8 +29,7 @@ Widget producItem(Product product) {
     },
     child: GetBuilder<CartController>(builder: (controller) {
       return Container(
-        padding: const EdgeInsets.only(top: 5, left: 10),
-        height: 75,
+        padding: const EdgeInsets.only(top: 0, left: 10, right: 6, bottom: 0),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -40,18 +39,17 @@ Widget producItem(Product product) {
         ),
         child: Row(
           children: [
-            Expanded(
+            Flexible(
               flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(
-                      child: Text(
+                  Text(
                     product.nome!,
                     style: TextStyle(
                       fontSize: 12,
                     ),
-                  )),
+                  ),
                   Row(
                     children: [
                       Icon(
@@ -117,7 +115,7 @@ Widget producItem(Product product) {
                 ],
               ),
             ),
-            Expanded(
+            Flexible(
               child: Image.network(
                 product.img1!,
                 fit: BoxFit.fitWidth,

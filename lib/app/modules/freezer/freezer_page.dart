@@ -29,20 +29,32 @@ class _FreezerPageState extends State<FreezerPage> {
       body: Column(
         children: [
           const AppBarFreezer(),
-          const SearchFreezer(),
+          SearchFreezer(),
           Obx(() {
             if (controller.status.value == StatusFreezer.loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             }
-            if (controller.status.value == StatusFreezer.fail) {
-              return const Center(
-                child: Text('Erro'),
+            if (controller.status.value == StatusFreezer.search) {
+              return FreezerList(
+                listFreezer: controller.listSearch,
               );
             }
-            return FreezerList(
-              listFreezer: controller.listFreezer,
+            if (controller.status.value == StatusFreezer.searchFail) {
+              return const Center(
+                child: Text('Freezer não encontrado'),
+              );
+            }
+            if (controller.status.value == StatusFreezer.load) {
+              return FreezerList(
+                listFreezer: controller.listFreezer,
+              );
+            }
+            return const Center(
+              child: Text('Erro'),
             );
           }),
         ],

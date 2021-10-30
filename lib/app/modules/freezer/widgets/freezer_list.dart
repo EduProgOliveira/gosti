@@ -7,25 +7,35 @@ import 'package:gosti_mobile/app/modules/freezer_pages/freezer_pages_controller.
 
 class FreezerList extends StatelessWidget {
   FreezerList({Key? key, required this.listFreezer}) : super(key: key);
+  FreezerController controller = Get.find<FreezerController>();
   final List<Freezer> listFreezer;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: listFreezer
-              .map((freezer) => freezerItem(freezer: freezer))
-              .toList(),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(const Duration(seconds: 1));
+          return await controller.loadListFreezer();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: listFreezer
+                .map((freezer) =>
+                    freezerItem(freezer: freezer, controller: controller))
+                .toList(),
+          ),
         ),
       ),
     );
   }
 }
 
-Widget freezerItem({required Freezer freezer}) {
+Widget freezerItem(
+    {required Freezer freezer, required FreezerController controller}) {
   FreezerPagesController pages = Get.find<FreezerPagesController>();
-  FreezerController controller = Get.find<FreezerController>();
+
   return GestureDetector(
     onTap: () {
       controller.setFreezer(freezer);
