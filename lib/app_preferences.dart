@@ -72,7 +72,7 @@ class AppPreferences {
 
     if (validade.isNotEmpty) {
       var val = DateTime.parse(validade);
-      if (now.difference(val).inHours == 1) {
+      if (now.difference(val).inHours >= 1) {
         return false;
       }
       return true;

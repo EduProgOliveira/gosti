@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gosti_mobile/app/core/app_images.dart';
 import 'package:gosti_mobile/app/core/app_text_styles.dart';
 import 'package:gosti_mobile/app/core/common_widgets/web_viewer.dart';
+import 'package:gosti_mobile/app/modules/dashboard/dashboard_page2.dart';
 import 'package:gosti_mobile/app_pages.dart';
 
 class HomePage extends StatelessWidget {
@@ -29,6 +30,7 @@ class HomePage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => Get.toNamed(AppPages.DASHBOARD),
+                  //onTap: () => Get.to(DashBoardPage()),
                   child: HomeOption(
                     text: 'Freezer',
                     imageAsset: AppImages.freezerIcon,

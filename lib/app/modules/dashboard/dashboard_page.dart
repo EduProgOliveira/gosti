@@ -8,8 +8,19 @@ import 'package:gosti_mobile/app/modules/dashboard/pages/dashboard_pages.dart';
 import 'package:gosti_mobile/app/modules/dashboard/widget/mensagem_sheet.dart';
 import 'package:gosti_mobile/app/modules/freezer_pages/freezer_pages_controller.dart';
 
-class DashBoardPage extends GetView<DashBoardController> {
+class DashBoardPage extends StatefulWidget {
   DashBoardPage({Key? key}) : super(key: key);
+
+  @override
+  State<DashBoardPage> createState() => _DashBoardPageState();
+}
+
+class _DashBoardPageState extends State<DashBoardPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => false;
+
+  DashBoardController controller = Get.put(DashBoardController());
   FreezerPagesController pages = Get.put(FreezerPagesController());
 
   @override
@@ -55,7 +66,8 @@ class DashBoardPage extends GetView<DashBoardController> {
           items: [
             GestureDetector(
               onTap: () async {
-                print(pages.pageController);
+                print('object');
+                print(pages.pageController.hasClients);
                 if (pages.pageController.hasClients) {
                   if (pages.pageController.page!.round() == 1) {
                     if (pages.cartController.listCart.isNotEmpty) {
