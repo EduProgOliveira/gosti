@@ -55,14 +55,20 @@ class DashBoardPage extends GetView<DashBoardController> {
           items: [
             GestureDetector(
               onTap: () async {
-                if (pages.pageController.page!.round() == 1 &&
-                    pages.cartController.listCart.length > 0) {
-                  if (await MensagemSheet.productBack()) {
+                print(pages.pageController);
+                if (pages.pageController.hasClients) {
+                  if (pages.pageController.page!.round() == 1) {
+                    if (pages.cartController.listCart.isNotEmpty) {
+                      if (await MensagemSheet.productBack()) {
+                        Get.back();
+                      }
+                    } else {
+                      Get.back();
+                    }
+                  } else {
                     Get.back();
                   }
-                } else if (pages.pageController.page!.round() == 1) {
-                  Get.back();
-                } else if (pages.pageController.page!.round() == 0) {
+                } else {
                   Get.back();
                 }
               },
